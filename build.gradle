@@ -44,6 +44,10 @@ java {
 gem {
     authors = ["kenkoooo"]
     email = ["kenkou.n@gmail.com"]
-    summary = project.description
-    homepage = "https://github.com/estie-inc/embulk-input-snowflake"
+    summary = "Embulk input plugin for Snowflake"
+    homepage = "https://github.com/estie-inc/embulk-input-snowflakedb"
+    licenses = ["MIT"]
+}
+gemPush {
+    host = "https://rubygems.org"
 }
