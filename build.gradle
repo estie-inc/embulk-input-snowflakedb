@@ -1,0 +1,49 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.9.21"
+
+    id "maven-publish"
+    id "org.embulk.embulk-plugins" version "0.6.2"
+}
+
+group = "jp.estie"
+version = "0.1.0"
+description = "Embulk input plugin for Snowflake"
+def embulkVersion = "0.10.43"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.embulk:embulk-input-jdbc:0.13.2"
+    implementation 'net.snowflake:snowflake-jdbc:3.14.4'
+
+    compileOnly "org.embulk:embulk-api:${embulkVersion}"
+    compileOnly "org.embulk:embulk-spi:${embulkVersion}"
+
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+kotlin {
+    jvmToolchain(8)
+}
+
+embulkPlugin {
+    mainClass = "jp.estie.input.snowflake.SnowflakeInputPlugin"
+    category = "input"
+    type = "snowflake"
+}
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+gem {
+    authors = ["kenkoooo"]
+    email = ["kenkou.n@gmail.com"]
+    summary = project.description
+    homepage = "https://github.com/estie-inc/embulk-input-snowflake"
+}
