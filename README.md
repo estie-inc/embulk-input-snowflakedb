@@ -1,4 +1,6 @@
 # Snowflake input plugin for Embulk
+[![Java CI with Gradle](https://github.com/estie-inc/embulk-input-snowflakedb/actions/workflows/test.yml/badge.svg)](https://github.com/estie-inc/embulk-input-snowflakedb/actions/workflows/test.yml)
+[![Gem Version](https://img.shields.io/gem/v/embulk-input-snowflakedb)](https://rubygems.org/gems/embulk-input-snowflakedb)
 
 Snowflake input plugin for Embulk loads records from Snowflake.
 
@@ -23,7 +25,8 @@ Snowflake input plugin for Embulk loads records from Snowflake.
 - **privateKeyPath**: path to private key file (string, optional)
 - **privateKeyPassphrase**: passphrase of private key file (string, optional). If the private key file is not encrypted,
   this option can be omitted.
-- **privateKey**: private key string (string, optional). You can use this option instead of `privateKeyPath`.
+- **privateKey**: private key string (string, optional). You can use this option instead of `privateKeyPath`. If you want to
+  put the private key from environment variable, you can use `"{{ env.PRIVATE_KEY | newline_to_br | replace: '<br />', '\n' }}"` syntax.
 
 ## Build
 
