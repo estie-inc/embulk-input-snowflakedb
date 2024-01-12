@@ -14,14 +14,27 @@ open class SnowflakeInputPlugin : AbstractJdbcInputPlugin() {
         val t = task as SnowflakePluginTask
         val props = Properties()
         props["user"] = t.getUser()
-        props["password"] = t.getPassword()
         props["db"] = t.getDatabase()
         props["schema"] = t.getSchema()
-        if (t.getRole() != "") {
+        if (t.getRole().isNotEmpty()) {
             props["role"] = t.getRole()
         }
-        if (t.getWarehouse() != "") {
+        if (t.getWarehouse().isNotEmpty()) {
             props["warehouse"] = t.getWarehouse()
+        }
+
+        if (t.getPassword().isNotEmpty()) {
+            props["password"] = t.getPassword()
+        }
+        if (t.getPrivateKey().isNotEmpty()) {
+            val passphrase = t.getPrivateKeyPassphrase().ifEmpty { null }
+            val privateKey = PrivateKeyReader.loadPrivateKey(t.getPrivateKey(), passphrase).getOrThrow()
+            props["privateKey"] = privateKey
+        }
+        if (t.getPrivateKeyPath().isNotEmpty()) {
+            val passphrase = t.getPrivateKeyPassphrase().ifEmpty { null }
+            val privateKey = PrivateKeyReader.loadPrivateKeyFromFile(t.getPrivateKeyPath(), passphrase).getOrThrow()
+            props["privateKey"] = privateKey
         }
 
         val con = DriverManager.getConnection("jdbc:snowflake://${t.getHost()}/", props)
@@ -36,6 +49,7 @@ open class SnowflakeInputPlugin : AbstractJdbcInputPlugin() {
         fun getUser(): String
 
         @Config("password")
+        @ConfigDefault("\"\"")
         fun getPassword(): String
 
         @Config("database")
@@ -51,6 +65,18 @@ open class SnowflakeInputPlugin : AbstractJdbcInputPlugin() {
         @Config("warehouse")
         @ConfigDefault("\"\"")
         fun getWarehouse(): String
+
+        @Config("privateKey")
+        @ConfigDefault("\"\"")
+        fun getPrivateKey(): String
+
+        @Config("privateKeyPath")
+        @ConfigDefault("\"\"")
+        fun getPrivateKeyPath(): String
+
+        @Config("privateKeyPassphrase")
+        @ConfigDefault("\"\"")
+        fun getPrivateKeyPassphrase(): String
     }
 
     override fun getTaskClass(): Class<out PluginTask> {
