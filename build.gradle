@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "jp.estie"
-version = "0.1.0"
+version = "0.1.1"
 description = "Embulk input plugin for Snowflake"
 def embulkVersion = "0.10.43"
 
